@@ -1,0 +1,344 @@
+class Inventory:
+
+    def __init__(self):
+        self.inventory = {}
+
+    def insert_item(self, item, quantity): #add read file part here
+        if item in self.inventory.keys():
+            self.inventory[item] += quantity
+        else:
+            self.inventory[item] = quantity
+
+    def delete_item(self, item, quantity):
+        if item in self.inventory.keys():
+            if self.inventory[item] == 0:
+                print("Sorry," + " " + item + " " + "is sold out")
+                
+            elif quantity > self.inventory[item]:
+                print("Sorry, there are only" + " " + str(quantity) + " " + str(item) + "left")
+
+            else:
+                self.inventory[item] -= quantity
+                return quantity
+
+        else:
+            print("This item does not exist")
+
+    def display_inventory(self):
+        print("INVENTORY")
+        print("==========================================")
+        for key in self.inventory:
+            print("|" + " " + key + "              " + str(self.inventory[key]) + "|")
+            print("==========================================")
+        
+            
+class Sales:
+
+    def __init__(self):
+        
+        self.sales = {"Alumni Dri-Fit Tee" : 0 , "College Song Tumbler" : 0 , "Moleskin Notebook" : 0 , "House Tee Set Luggage Tag" : 0}
+        self.prices = {"Alumni Dri-Fit Tee" : 12 , "College Song Tumbler" : 15 , "Moleskin Notebook" : 10 , "House Tee Set Luggage Tag" : 5}
+        
+    def append_sales(self, item, quantity): #add read file part here
+        if item not in self.sales.keys():
+            print("This item does not exist")
+        else:
+            price = self.prices[item]
+            result = quantity * price
+            self.sales[item] += result
+
+
+    def delete_sales(self, item, quantity): #add read file part here
+        if item not in self.sales.keys():
+            print("This item does not exist")
+        else:
+            price = self.prices[item]
+            result = quantity * price
+            self.sales[item] -= result
+
+
+        
+    def display_sales(self):
+        print("SALES")
+        print("==========================================")
+        for key in self.sales:
+            print("|" + " " + key + "              " + "$" + str(self.sales[key]) + "|")
+            print("==========================================")
+
+class Cart:
+
+    def __init__(self):
+        self.cart_qty = {}# stores item as key and number bought as data
+        self.cart_price = {} #stores item as key and total price of each item bought as data
+        self.prices = {"Alumni Dri-Fit Tee" : 12 , "College Song Tumbler" : 15 , "Moleskin Notebook" : 10 , "House Tee Set Luggage Tag" : 5}
+
+
+    def price_calculator(self, item, quantity):
+        price = self.prices[item]
+        result = quantity * price
+        return result
+        
+
+    def add_to_cart(self, item, quantity):
+        if item not in self.prices.keys():
+            print("This item does not exist")
+            
+        elif item in self.cart_qty.keys():
+            self.cart_qty[item] += quantity
+            self.cart_price[item] += self.price_calculator(item, quantity)
+
+        else:
+            self.cart_qty[item] = quantity
+            self.cart_price[item] = self.price_calculator(item, quantity)
+
+
+    def remove_from_cart(self, item, quantity):
+        if item not in self.prices.keys():
+            print("This item does not exist")
+        elif item not in self.cart_qty.keys():
+            print("Item is not in cart")
+        else:
+            self.cart_qty[item] -= quantity
+            self.cart_price[item] -= self.price_calculator(item, quantity)
+            
+            
+
+    def total_amount(self): #calculates total amount customer needs to pay
+        result = 0
+        for key in self.cart_price:
+            result += self.cart_price[key]
+
+        return result
+            
+
+    def display_cart(self):
+        print("CART")
+        print("==========================================")
+        print("Item" + "____________" + "Price" + "____________" + "Quantity" + "____________" + "Total")
+        for key in self.cart_qty:
+              print(key + "____________" + "$" + str(self.prices[key]) + "____________" + str(self.cart_qty[key]) + "____________" + "$" + str(self.cart_price[key]))
+
+        print("TOTAL: " + "$" + str(self.total_amount()))
+
+
+inventory = Inventory()
+sales = Sales()
+
+def main():
+    while True:
+        
+        cart = Cart()
+
+        while True:
+            print("MAIN MENU")
+            print("============")
+            print("1. BUY HOMECOMING ITEMS")
+            print("2. FINALISE PURCHASE")
+            print("3. DISPLAY INVENTORY")
+            print("4. DISPLAY SALES")
+            print("5. EXIT")
+
+            choice = int(input())
+            if choice == 1:
+                while True:
+                    print("Select item to purchase")
+                    print("1. Alumni Dri-Fit Tee")
+                    print("2. College Song Tumbler")
+                    print("3. Moleskin Notebook")
+                    print("4. House Tee Set Luggage Tag")
+                    print("5. Back to Main Menu")
+
+                    option = int(input())
+
+                    if option == 1:
+                        
+                        print("Please enter quantity: ")
+                        qty1 = int(input())
+                        inventory.delete_item("Alumni Dri-Fit Tee", qty1)
+                        sales.append_sales("Alumni Dri-Fit Tee", qty1)
+                        cart.add_to_cart("Alumni Dri-Fit Tee", qty1)
+                        cart.display_cart
+                        print("Do you want to continue shopping? Y/N")
+                        decision1 = input()
+                        if decision1.upper == "N":
+                            break
+
+                    if option == 2:
+                        
+                        print("Please enter quantity: ")
+                        qty2 = int(input())
+                        inventory.delete_item("College Song Tumbler", qty2)
+                        sales.append_sales("College Song Tumbler", qty2)
+                        cart.add_to_cart("College Song Tumbler", qty2)
+                        cart.display_cart
+                        print("Do you want to continue shopping? Y/N")
+                        decision2 = input()
+                        if decision2.upper == "N":
+                            break
+
+                    if option == 3:
+                        
+                        print("Please enter quantity: ")
+                        qty3 = int(input())
+                        inventory.delete_item("Moleskin Notebook", qty3)
+                        sales.append_sales("Moleskin Notebook", qty3)
+                        cart.add_to_cart("Moleskin Notebook", qty3)
+                        cart.display_cart
+                        print("Do you want to continue shopping? Y/N")
+                        decision3 = input()
+                        if decision3.upper == "N":
+                            break
+
+                    if option == 4:
+                        
+                        print("Please enter quantity: ")
+                        qty4 = int(input())
+                        inventory.delete_item("House Tee Set Luggage Tag", qty4)
+                        sales.append_sales("House Tee Set Luggage Tag", qty4)
+                        cart.add_to_cart("House Tee Set Luggage Tag", qty4)
+                        cart.display_cart
+                        print("Do you want to continue shopping? Y/N")
+                        decision4 = input()
+                        if decision4.upper == "N":
+                            break
+
+                    if option == 5:
+                        break
+                        
+
+                    
+
+                    
+
+                        
+            elif choice == 2:
+                while True:
+                    cart.display_cart()
+                    print("Do you want to make any changes to your purchases? Y/N")
+                    decision = input()
+                    if decision.upper() == "N":
+                        cart.display_cart
+                        print("Thank you for shopping with us!")
+                        break
+                    if decision.upper() == "Y":
+                        cart.display_cart()
+                        while True:
+                            print("Choose item you want to remove")
+                            print("1. Alumni Dri-Fit Tee")
+                            print("2. College Song Tumbler")
+                            print("3. Moleskin Notebook")
+                            print("4. House Tee Set Luggage Tag")
+                            print("5. Back")
+
+                            option = int(input())
+
+                            if option == 1:
+                        
+                                print("Please enter quantity to remove: ")
+                                qty1 = int(input())
+                                inventory.append_item("Alumni Dri-Fit Tee", qty1)
+                                sales.delete_sales("Alumni Dri-Fit Tee", qty1)
+                                cart.remove_from_cart("Alumni Dri-Fit Tee", qty1)
+                                cart.display_cart
+                                print("Do you want to continue removing? Y/N")
+                                decision1 = input()
+                                if decision1.upper == "N":
+                                    break
+
+                            if option == 2:
+                        
+                                print("Please enter quantity to remove: ")
+                                qty2 = int(input())
+                                inventory.append_item("College Song Tumbler", qty2)
+                                sales.delete_sales("College Song Tumbler", qty2)
+                                cart.remove_from_cart("College Song Tumbler", qty2)
+                                cart.display_cart
+                                print("Do you want to continue removing? Y/N")
+                                decision2 = input()
+                                if decision2.upper == "N":
+                                    break
+
+                            if option == 3:
+                        
+                                print("Please enter quantity to remove: ")
+                                qty3 = int(input())
+                                inventory.append_item("Moleskin Notebook", qty3)
+                                sales.delete_sales("Moleskin Notebook", qty3)
+                                cart.remove_from_cart("Moleskin Notebook", qty3)
+                                cart.display_cart
+                                print("Do you want to continue removing? Y/N")
+                                decision3 = input()
+                                if decision3.upper == "N":
+                                    break
+
+                            if option == 4:
+                        
+                                print("Please enter quantity to remove: ")
+                                qty4 = int(input())
+                                inventory.delete_item("House Tee Set Luggage Tag", qty4)
+                                sales.delete_sales("House Tee Set Luggage Tag", qty4)
+                                cart.remove_from_cart("House Tee Set Luggage Tag", qty4)
+                                cart.display_cart
+                                print("Do you want to continue removing? Y/N")
+                                decision4 = input()
+                                if decision4.upper == "N":
+                                    break
+
+                            if option == 5:
+                                break
+
+
+                        break
+
+
+            elif choice == 3:
+                inventory.display_inventory()
+
+
+            elif choice == 4:
+                sales.display_sales()
+
+            else:
+
+                break
+            
+
+main()
+                    
+
+                            
+
+                            
+                                
+
+
+                            
+
+                            
+                                    
+
+                            
+                            
+                            
+                            
+                    
+                            
+                        
+                
+            
+        
+        
+            
+            
+         
+        
+        
+
+
+
+
+        
+        
+
+    
+
